@@ -21,7 +21,7 @@ Calling ``Start.bat`` from location containing Excel files:
 # setup
 
 ```dos
-git clone --recurse-submodules https://github.com/karlronsaria/Me
+git clone --recurse-submodules https://github.com/karlronsaria/karlrFastExcelFile
 ```
 
 # maintain
