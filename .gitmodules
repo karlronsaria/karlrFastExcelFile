@@ -1,0 +1,6 @@
+[submodule "module/PsTool"]
+	path = module/PsTool
+	url = https://github.com/karlronsaria/PsTool
+[submodule "module/PsQuickform"]
+	path = module/PsQuickform
+	url = https://github.com/karlronsaria/PsQuickform
