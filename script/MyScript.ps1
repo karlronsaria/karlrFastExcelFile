@@ -18,12 +18,12 @@ $start = [PsCustomObject]@{
     # Mandatory = $true
     Symbols = @(
         [PsCustomObject]@{
-            Name = "CopyExisting"
-            Text = "Copy Existing Workbook"
+            Name = "NewMonthBook"
+            Text = "New Month Book"
         },
         [PsCustomObject]@{
-            Name = "NewWorkbook"
-            Text = "New Workbook"
+            Name = "CopyExisting"
+            Text = "Copy Existing Workbook"
         }
     )
 }
@@ -32,6 +32,33 @@ $prefs = Get-QformPreference `
     -Preference ([PsCustomObject]@{
         Caption = "Choose What Do"
     })
+
+$months = @{}
+
+$newMonthBook = @(
+    [PsCustomObject]@{
+        Name = "Year"
+        Type = "Numeric"
+        Minimum = "1970"
+        Maximum = "9999"
+        Default = (Get-Date).Year
+        Mandatory = $true
+    },
+    [PsCustomObject]@{
+        Name = "Month"
+        Type = "Enum"
+        Symbols = 1 .. 12 | foreach {
+            $name = (Get-Date -Month $_).ToString("MMMM")
+            $months[$name] = $_
+
+            [PsCustomObject]@{
+                Name = $name
+            }
+        }
+        Default = (Get-Date).ToString("MMMM")
+        Mandatory = $true
+    }
+)
 
 $copyExisting = @(
     [PsCustomObject]@{
@@ -61,13 +88,29 @@ if (-not $what.Confirm) {
 }
 
 switch ($what.MenuAnswers.Start) {
-    'NewWorkbook' {
+    'NewMonthBook' {
         $prefs = Get-QformPreference `
+            -Reference $prefs `
             -Preference ([PsCustomObject]@{
-                Caption = "Not Implemented"
+                Caption = "New Month Book"
             })
 
-        Show-QformMenu -Preferences $prefs
+        $what = $newMonthBook | Show-QformMenu `
+            -Preferences $prefs
+
+        if (-not $what.Confirm) {
+            return
+        }
+
+        $answers = $what.MenuAnswers
+
+        $setting = cat "$PsScriptRoot/../res/setting.json" `
+            | ConvertFrom-Json
+
+        New-MsExcelMonthBook `
+            -Year $answers.Year `
+            -Month $months[$answers.Month] `
+            -ColumnHeadings $setting.ColumnHeadings
     }
 
     'CopyExisting' {

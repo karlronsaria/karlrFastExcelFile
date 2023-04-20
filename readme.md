@@ -3,8 +3,28 @@ A set of sysadmin tasks used at a place of employment, made easier with the use 
 
 ## feature
 
+### Create New Month Book
+Create a new Excel workbook based on a month of the year, with a worksheet for each day in the month.
+
+- GUI
+  ```dos
+  .\Start.bat ~\Downloads\__POOL
+  ```
+  ![2023_04_20_024708](./res/2023_04_20_024708.png)
+
+- PowerShell
+  ```powershell
+  .\module\PsTool\Get-Scripts.ps1 | % { . $_ }
+  New-MsExcelMonthBook
+  ```
+- Result
+
+  ![2023_04_20_025210](./res/2023_04_20_025210.png)
+
+  ![2023_04_20_025311](./res/2023_04_20_025311.png)
+
 ### Copy From Existing Workbook
-Make a copy of an existing workbook (``*.xls*``) and perform a find-and-replace on the name of each worksheet.
+Make a copy of an existing workbook ``*.xls*`` and perform a find-and-replace on the name of each worksheet.
 
 - GUI
   ```dos
